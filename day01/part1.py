@@ -36,10 +36,7 @@ get if you multiply them together?
 """
 import functools
 from operator import mul
-from pathlib import Path
 import time
-
-DATA = Path('data')
 
 
 def simple_timer(func):
@@ -75,7 +72,7 @@ def complement_calc(data):
 
 
 if __name__ == '__main__':
-    with open(DATA / 'day1_input.txt') as f:
+    with open('input.txt') as f:
         data = [int(i.strip()) for i in f.readlines()]
 
     # quick enough

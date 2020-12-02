@@ -43,11 +43,7 @@ Using the above example again, the three entries that sum to 2020 are 979, 366, 
 In your expense report, what is the product of the three entries that sum to 2020?
 """
 import functools
-from operator import mul
-from pathlib import Path
 import time
-
-DATA = Path('data')
 
 
 def simple_timer(func):
@@ -81,7 +77,7 @@ def brute_force(data):
 
 
 if __name__ == '__main__':
-    with open(DATA / 'day1_input.txt') as f:
+    with open('input.txt') as f:
         data = [int(i.strip()) for i in f.readlines()]
 
     brute_force_ans = brute_force(data)

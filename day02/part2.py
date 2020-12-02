@@ -33,11 +33,6 @@ Given the same example list from above:
 2-9 c: ccccccccc is invalid: both position 2 and position 9 contain c.
 How many passwords are valid according to the new interpretation of the policies?
 """
-import functools
-from operator import mul
-import time
-
-
 def index_password_checker(line):
     min_max, char, password = line.split(' ')
     first_index, second_index = [int(i)-1 for i in min_max.split('-')]

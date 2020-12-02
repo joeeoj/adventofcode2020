@@ -19,11 +19,6 @@ In the above example, 2 passwords are valid. The middle password, cdefg, is not;
 
 How many passwords are valid according to their policies?
 """
-import functools
-from operator import mul
-import time
-
-
 def password_checker(line):
     min_max, char, password = line.split(' ')
     min_count, max_count = [int(i) for i in min_max.split('-')]

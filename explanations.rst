@@ -311,3 +311,4 @@ Count the number of valid passports - those that have all required fields and va
 .. _`Day 1`: https://adventofcode.com/2020/day/1
 .. _`Day 2`: https://adventofcode.com/2020/day/2
 .. _`Day 3`: https://adventofcode.com/2020/day/3
+.. _`Day 4`: https://adventofcode.com/2020/day/4

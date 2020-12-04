@@ -1,25 +1,20 @@
-# cid not required
-required_fields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
+from typing import List
 
-with open('input.txt') as f:
-    fields = []
+
+def file_to_dicts(fname: str = 'input.txt') -> List[dict]:
+    # wayyy easier way to split into each passport group
+    with open(fname) as f:
+        groups = f.read().split('\n\n')
+
     passports = []
-    for row in f.readlines():
-        curr = row.strip()
-        if curr == '' and len(fields) > 0:
-            passports.append(fields)
-            fields = []
+    for group in groups:
+        d = dict([g.split(':') for g in group.split()])
+        passports.append(d)
+    return passports
 
-        split_row = curr.split(' ')
-        parsed_row = [r.split(':')[0].strip() for r in split_row if r.split(':')[0].strip() != '']
-        fields += parsed_row
 
-# also add the very last row
-passports.append(fields)
-
-ans = 0
-for passport in passports:
-    if set(passport) >= set(required_fields):
-        ans +=1
-
-print(ans)
+if __name__ == '__main__':
+    passports = file_to_dicts()
+    required_fields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']  # cid not required
+    ans = sum([set(p) >= set(required_fields) for p in passports])  # superset
+    print(ans)

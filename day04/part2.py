@@ -1,61 +1,59 @@
 import re
+from typing import List
 
 
-# cid not required
-required_fields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
+def file_to_dicts(fname: str = 'input.txt') -> List[dict]:
+    # wayyy easier way to split into each passport group
+    with open(fname) as f:
+        groups = f.read().split('\n\n')
 
-with open('input.txt') as f:
-    fields = dict()
     passports = []
-    for row in f.readlines():
-        curr = row.strip()
-        if curr == '' and len(fields) > 0:
-            passports.append(fields)
-            fields = dict()
-            continue
+    for group in groups:
+        d = dict([g.split(':') for g in group.split()])
+        passports.append(d)
+    return passports
 
-        split_row = curr.split(' ')
-        for item in split_row:
-            k, v = item.strip().split(':')
-            fields[k] = v
+def check_range(str_val: str, lower: int, upper: int) -> bool:
+    return lower <= int(str_val) <= upper 
 
-# also add the very last row
-passports.append(fields)
+def check_height(str_val: str, unit: str, lower, upper) -> bool:
+    # first check if any valid unit contained
+    if 'cm' not in str_val and 'in' not in str_val:
+        return False
+    # then skip if not the correct measurement
+    if unit not in str_val:
+        return True
 
-def extra_rules(d):
-    if len(d.get('byr')) != 4 or int(d.get('byr')) < 1920 or int(d.get('byr')) > 2002:
-        return False
-    elif len(d.get('iyr')) != 4 or int(d.get('iyr')) < 2010 or int(d.get('iyr')) > 2020:
-        return False
-    elif len(d.get('eyr')) != 4 or int(d.get('eyr')) < 2020 or int(d.get('eyr')) > 2030:
-        return False
+    val = int(str_val.replace(unit, ''))
+    return check_range(val, lower, upper)
 
-    if 'cm' not in d.get('hgt') and 'in' not in d.get('hgt'):
-        return False
-    elif 'cm' in d.get('hgt'):
-        hgt = int(d.get('hgt').replace('cm', ''))
-        if hgt < 150 or hgt > 193:
+def check_regex(input_str: str, pat: str) -> bool:
+    return re.match(pat, input_str) is not None
+
+def check_membership(input_str: str, items: list) -> bool:
+    return input_str in items
+
+def extra_checks(d: dict) -> bool:
+    checks = [
+        check_range(d.get('byr'), 1920, 2002),
+        check_range(d.get('iyr'), 2010, 2020),
+        check_range(d.get('eyr'), 2020, 2030),
+        check_height(d.get('hgt'), 'cm', 150, 193),
+        check_height(d.get('hgt'), 'in', 59, 76),
+        check_regex(d.get('hcl'), r'#([0-9|a-f]{6})$'),
+        check_membership(d.get('ecl'), ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']),
+        check_regex(d.get('pid'), r'^([0-9]{9})$'),
+    ]
+
+    for check in checks:
+        if not check:
             return False
-    elif 'in' in d.get('hgt'):
-        hgt = int(d.get('hgt').replace('in', ''))
-        if hgt < 59 or hgt > 76:
-            return False
-
-    if re.match(r'^#([0-9|a-f]{6})$', d.get('hcl')) is None:
-        return False
-
-    eye_colors = ['amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth']
-    if d.get('ecl') not in eye_colors:
-        return False
-
-    if re.match(r'^([0-9]{9})$', d.get('pid')) is None:
-        return False
-
     return True
 
-ans = 0
-for passport in passports:
-    if set(passport.keys()) >= set(required_fields) and extra_rules(passport):
-        ans +=1
 
-print(ans)
+if __name__ == '__main__':
+    passports = file_to_dicts()
+
+    required_fields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
+    ans = sum([set(p) >= set(required_fields) and extra_checks(p) for p in passports])
+    print(ans)

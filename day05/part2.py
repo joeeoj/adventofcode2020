@@ -14,7 +14,7 @@ def binary_split(input_range: List[int], part) -> List[int]:
     else:
         return None
 
-def calc_seat_id(row, col):
+def calc_seat_id(row: int, col: int) -> int:
     return (row * 8) + col
 
 def parse_pass(boarding_pass: str) -> Seat:

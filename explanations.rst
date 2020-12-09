@@ -448,14 +448,187 @@ Using the same example as above:
 
 This list represents answers from five groups:
 
-In the first group, everyone (all 1 person) answered "yes" to 3 questions: a, b, and c.
-In the second group, there is no question to which everyone answered "yes".
-In the third group, everyone answered yes to only 1 question, a. Since some people did not answer "yes" to b or c, they don't count.
-In the fourth group, everyone answered yes to only 1 question, a.
-In the fifth group, everyone (all 1 person) answered "yes" to 1 question, b.
-In this example, the sum of these counts is 3 + 0 + 1 + 1 + 1 = 6.
+::
+
+    In the first group, everyone (all 1 person) answered "yes" to 3 questions: a, b, and c.
+    In the second group, there is no question to which everyone answered "yes".
+    In the third group, everyone answered yes to only 1 question, a. Since some people did not answer "yes" to b or c, they don't count.
+    In the fourth group, everyone answered yes to only 1 question, a.
+    In the fifth group, everyone (all 1 person) answered "yes" to 1 question, b.
+    In this example, the sum of these counts is 3 + 0 + 1 + 1 + 1 = 6.
 
 For each group, count the number of questions to which everyone answered "yes". What is the sum of those counts?
+
+--------------------------------------------------------------------------------
+
+`Day 7`_
+--------
+
+--- Day 7: Handy Haversacks ---
+
+You land at the regional airport in time for your next flight. In fact, it looks like you'll even have time to grab some food: all flights are currently delayed due to issues in luggage processing.
+
+Due to recent aviation regulations, many rules (your puzzle input) are being enforced about bags and their contents; bags must be color-coded and must contain specific quantities of other color-coded bags. Apparently, nobody responsible for these regulations considered how long they would take to enforce!
+
+For example, consider the following rules:
+
+::
+
+    light red bags contain 1 bright white bag, 2 muted yellow bags.
+    dark orange bags contain 3 bright white bags, 4 muted yellow bags.
+    bright white bags contain 1 shiny gold bag.
+    muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.
+    shiny gold bags contain 1 dark olive bag, 2 vibrant plum bags.
+    dark olive bags contain 3 faded blue bags, 4 dotted black bags.
+    vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
+    faded blue bags contain no other bags.
+    dotted black bags contain no other bags.
+
+These rules specify the required contents for 9 bag types. In this example, every faded blue bag is empty, every vibrant plum bag contains 11 bags (5 faded blue and 6 dotted black), and so on.
+
+You have a shiny gold bag. If you wanted to carry it in at least one other bag, how many different bag colors would be valid for the outermost bag? (In other words: how many colors can, eventually, contain at least one shiny gold bag?)
+
+In the above rules, the following options would be available to you:
+
+::
+
+    A bright white bag, which can hold your shiny gold bag directly.
+    A muted yellow bag, which can hold your shiny gold bag directly, plus some other bags.
+    A dark orange bag, which can hold bright white and muted yellow bags, either of which could then hold your shiny gold bag.
+    A light red bag, which can hold bright white and muted yellow bags, either of which could then hold your shiny gold bag.
+
+So, in this example, the number of bag colors that can eventually contain at least one shiny gold bag is 4.
+
+How many bag colors can eventually contain at least one shiny gold bag? (The list of rules is quite long; make sure you get all of it.)
+
+--- Part Two ---
+
+It's getting pretty expensive to fly these days - not because of ticket prices, but because of the ridiculous number of bags you need to buy!
+
+Consider again your shiny gold bag and the rules from the above example:
+
+::
+
+    faded blue bags contain 0 other bags.
+    dotted black bags contain 0 other bags.
+    vibrant plum bags contain 11 other bags: 5 faded blue bags and 6 dotted black bags.
+    dark olive bags contain 7 other bags: 3 faded blue bags and 4 dotted black bags.
+
+So, a single shiny gold bag must contain 1 dark olive bag (and the 7 bags within it) plus 2 vibrant plum bags (and the 11 bags within each of those): 1 + 1*7 + 2 + 2*11 = 32 bags!
+
+Of course, the actual rules have a small chance of going several levels deeper than this example; be sure to count all of the bags, even if the nesting becomes topologically impractical!
+
+Here's another example:
+
+::
+
+    shiny gold bags contain 2 dark red bags.
+    dark red bags contain 2 dark orange bags.
+    dark orange bags contain 2 dark yellow bags.
+    dark yellow bags contain 2 dark green bags.
+    dark green bags contain 2 dark blue bags.
+    dark blue bags contain 2 dark violet bags.
+    dark violet bags contain no other bags.
+
+In this example, a single shiny gold bag must contain 126 other bags.
+
+How many individual bags are required inside your single shiny gold bag?
+
+--------------------------------------------------------------------------------
+
+`Day 9`_
+--------
+
+--- Day 9: Encoding Error ---
+
+With your neighbor happily enjoying their video game, you turn your attention to an open data port on the little screen in the seat in front of you.
+
+Though the port is non-standard, you manage to connect it to your computer through the clever use of several paperclips. Upon connection, the port outputs a series of numbers (your puzzle input).
+
+The data appears to be encrypted with the eXchange-Masking Addition System (XMAS) which, conveniently for you, is an old cypher with an important weakness.
+
+XMAS starts by transmitting a preamble of 25 numbers. After that, each number you receive should be the sum of any two of the 25 immediately previous numbers. The two numbers will have different values, and there might be more than one such pair.
+
+For example, suppose your preamble consists of the numbers 1 through 25 in a random order. To be valid, the next number must be the sum of two of those numbers:
+
+::
+
+    - 26 would be a valid next number, as it could be 1 plus 25 (or many other pairs, like 2 and 24).
+    - 49 would be a valid next number, as it is the sum of 24 and 25.
+    - 100 would not be valid; no two of the previous 25 numbers sum to 100.
+    - 50 would also not be valid; although 25 appears in the previous 25 numbers, the two numbers in the pair must be different.
+
+Suppose the 26th number is 45, and the first number (no longer an option, as it is more than 25 numbers ago) was 20. Now, for the next number to be valid, there needs to be some pair of numbers among 1-19, 21-25, or 45 that add up to it:
+
+::
+
+    - 26 would still be a valid next number, as 1 and 25 are still within the previous 25 numbers.
+    - 65 would not be valid, as no two of the available numbers sum to it.
+    - 64 and 66 would both be valid, as they are the result of 19+45 and 21+45 respectively.
+
+Here is a larger example which only considers the previous 5 numbers (and has a preamble of length 5):
+
+::
+
+    35
+    20
+    15
+    25
+    47
+    40
+    62
+    55
+    65
+    95
+    102
+    117
+    150
+    182
+    127
+    219
+    299
+    277
+    309
+    576
+
+In this example, after the 5-number preamble, almost every number is the sum of two of the previous 5 numbers; the only number that does not follow this rule is 127.
+
+The first step of attacking the weakness in the XMAS data is to find the first number in the list (after the preamble) which is not the sum of two of the 25 numbers before it. What is the first number that does not have this property?
+
+--- Part Two ---
+
+The final step in breaking the XMAS encryption relies on the invalid number you just found: you must find a contiguous set of at least two numbers in your list which sum to the invalid number from step 1.
+
+Again consider the above example:
+
+::
+
+    35
+    20
+    15
+    25
+    47
+    40
+    62
+    55
+    65
+    95
+    102
+    117
+    150
+    182
+    127
+    219
+    299
+    277
+    309
+    576
+
+In this list, adding up all of the numbers from 15 through 40 produces the invalid number from step 1, 127. (Of course, the contiguous set of numbers in your actual list might be much longer.)
+
+To find the encryption weakness, add together the smallest and largest number in this contiguous range; in this example, these are 15 and 47, producing 62.
+
+What is the encryption weakness in your XMAS-encrypted list of numbers?
 
 --------------------------------------------------------------------------------
 
@@ -465,3 +638,5 @@ For each group, count the number of questions to which everyone answered "yes". 
 .. _`Day 4`: https://adventofcode.com/2020/day/4
 .. _`Day 5`: https://adventofcode.com/2020/day/5
 .. _`Day 6`: https://adventofcode.com/2020/day/6
+.. _`Day 7`: https://adventofcode.com/2020/day/7
+.. _`Day 9`: https://adventofcode.com/2020/day/9

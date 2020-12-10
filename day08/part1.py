@@ -2,15 +2,15 @@ from collections import namedtuple
 from typing import List
 
 
-Operation = namedtuple('Operation', ['cmd', 'num'])
-Executed = namedtuple('Executed', ['cmd', 'num', 'index'])
+Operation = namedtuple('Operation', ['cmd', 'num', 'index'])
+
 
 def operation_parser() -> List[Operation]:
     data = []
     with open('input.txt') as f:
-        for row in f.readlines():
+        for i, row in enumerate(f.readlines()):
             cmd, num = row.strip().split(' ')
-            data.append(Operation(cmd, int(num)))
+            data.append(Operation(cmd, int(num), i))
     return data
 
 def find_loop(data: List[Operation]) -> int:
@@ -19,11 +19,10 @@ def find_loop(data: List[Operation]) -> int:
 
     while True:
         op = data[i]
-        ex = Executed(op.cmd, op.num, i)  # includes index
 
-        if ex in seen:
+        if op in seen:
             return acc
-        seen.update([ex])
+        seen.update([op])
 
         if op.cmd == 'acc':
             acc += op.num
